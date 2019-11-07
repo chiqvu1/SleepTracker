@@ -17,32 +17,28 @@
 package com.example.android.trackmysleepquality.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface SleepDatabaseDao {
-    //insert sleep night into database table
-    //when call insert, room will create a row
-
     @Insert
     fun insert(night: SleepNight)
 
     @Update
     fun update(night: SleepNight)
 
-    //create query
-    //pass the value from the table. if pass in 10 as and 10 exist, return that data, if not, return null
-    @Query("SELECT * FROM daily_sleep_quallity_table WHERE nightId = :key")
-    fun get(key: Long): SleepNight?
+    @Query("SELECT * FROM daily_sleep_quallity_table WHERE nightId = :key" )
+    fun get(key: Long) : SleepNight?  //nullable SleepNight
 
-    @Query("DELETE FROM daily_sleep_quallity_table")
+    @Query ("DELETE FROM daily_sleep_quallity_table")
     fun clear()
 
-    @Query("SELECT * FROM daily_sleep_quallity_table ORDER BY nightId DESC")
-    //live data will keep the data updated for us so we won't have to run the query again
+    @Query ("SELECT * FROM daily_sleep_quallity_table ORDER BY nightId DESC")
     fun getAllNights(): LiveData<List<SleepNight>>
 
     @Query("SELECT * FROM daily_sleep_quallity_table ORDER BY nightId DESC LIMIT 1")
-    fun getTonight(): SleepNight?
+    fun getTonight(): SleepNight?  //return nullable type SleepNight
 }
-

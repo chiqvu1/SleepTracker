@@ -15,22 +15,44 @@
  */
 
 package com.example.android.trackmysleepquality.database
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "daily_sleep_quallity_table")
-data class SleepNight (
-        //select nightID as primary key
-        @PrimaryKey(autoGenerate = true)
-        var nightId: Long = 0L,
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import java.security.AccessControlContext
 
-        @ColumnInfo(name = "start_time_milli")
-        val startTimeMilli: Long = System.currentTimeMillis(),
+@Database(entities = [SleepNight::class], version = 1, exportSchema = false)
+abstract class SleepDatabase: RoomDatabase() {
 
-        @ColumnInfo(name = "end_time_milli")
-        var endTimeMilli: Long = startTimeMilli,
+        abstract val sleepDatabaseDao: SleepDatabaseDao
 
-        @ColumnInfo(name = "quality_rating")
-        var sleepQuality: Int = -1
-)
+        //define companion object allow clients to access method for getting and creating database without
+        //instatinating an object of that class
+
+        companion object {
+
+                @Volatile
+                private var INSTANCE: SleepDatabase? = null
+
+                fun getInstane(context: Context): SleepDatabase {
+
+                        //prevent multiple thread of execution happens
+                        synchronized(this) {
+                                var instance = INSTANCE
+
+                                if (instance == null) {
+                                        instance = Room.databaseBuilder(
+                                                context.applicationContext,
+                                                SleepDatabase::class.java,
+                                                "sleep history database"
+                                        )
+                                                .fallbackToDestructiveMigration()
+                                                .build()      //build the database
+                                        INSTANCE = instance
+                                }
+                                return instance
+                        }
+                }
+        }
+}
