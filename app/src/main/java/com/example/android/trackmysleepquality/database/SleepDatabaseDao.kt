@@ -25,24 +25,24 @@ interface SleepDatabaseDao {
     //when call insert, room will create a row
 
     @Insert
-    fun insert(night: sleepNight)
+    fun insert(night: SleepNight)
 
     @Update
-    fun update(night: sleepNight)
+    fun update(night: SleepNight)
 
     //create query
     //pass the value from the table. if pass in 10 as and 10 exist, return that data, if not, return null
     @Query("SELECT * FROM daily_sleep_quallity_table WHERE nightId = :key")
-    fun get(key: Long): sleepNight?
+    fun get(key: Long): SleepNight?
 
     @Query("DELETE FROM daily_sleep_quallity_table")
     fun clear()
 
     @Query("SELECT * FROM daily_sleep_quallity_table ORDER BY nightId DESC")
     //live data will keep the data updated for us so we won't have to run the query again
-    fun getAllNights(): LiveData<List<sleepNight>>
+    fun getAllNights(): LiveData<List<SleepNight>>
 
     @Query("SELECT * FROM daily_sleep_quallity_table ORDER BY nightId DESC LIMIT 1")
-    fun getTonight(): sleepNight?
+    fun getTonight(): SleepNight?
 }
 
