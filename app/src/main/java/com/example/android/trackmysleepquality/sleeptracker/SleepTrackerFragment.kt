@@ -53,9 +53,11 @@ class SleepTrackerFragment : Fragment() {
 
         val viewModelFactory = SleepTrackerViewModelFactory(dataSource, application)
 
-        val sleepTrackerViewModelFactory = ViewModelProviders.of(this,
-                SleepTrackerViewModelFactory.get(SleepTrackerViewModel::class.java))
+        val sleepTrackerViewModel = ViewModelProviders.of(this,
+                viewModelFactory).get(SleepTrackerViewModel::class.java)
 
+
+        binding.sleepTrackerViewModel = sleepTrackerViewModel
         //set up data binding, connect View model to user interface
         binding.setLifecycleOwner(this)     //binding will be able to observe live data update
 
