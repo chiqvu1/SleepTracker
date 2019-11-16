@@ -64,12 +64,12 @@ class SleepQualityFragment : Fragment() {
                         this, viewModelFactory).get(SleepQualityViewModel::class.java)
         binding.sleepQualityViewModel = sleepQualityViewModel
 
-        sleepQualityViewModel.navigateToSleepQuality.observe(this, Observer {
+        sleepQualityViewModel.navigateToSleepTracker.observe(this, Observer {
             night ->
             night?.let {
                 this.findNavController().navigate(
-                        SleepTrackerFragmentDirections
-                                .actionSleepTrackerFragmentToSleepQualityFragment(night.nightId))
+                        SleepQualityFragmentDirections
+                                .actionSleepQualityFragmentToSleepTrackerFragment())
                 sleepQualityViewModel.doneNavigating()
 
             }
